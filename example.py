@@ -1,5 +1,5 @@
-from ledcontrols import LedControls
-from valuecheck import ValueCheck
+from src.ledcontrols import LedControls
+from src.valuecheck import ValueCheck
 
 if __name__ == '__main__':
     def my_profile_breathe():
@@ -8,9 +8,6 @@ if __name__ == '__main__':
         g.set_breathe('secondary', color['teal'])
 
     g=LedControls()
-
-    if not g.detach_driver():
-        exit()
 
     def my_profile_static():
         color={'lav': '784da5', 'teal': '3a698e'}  # Lavender, teal
@@ -39,5 +36,3 @@ if __name__ == '__main__':
 
         print(int(color, 16))
         g.set_color(led_option, color)
-
-        g.attach_driver()

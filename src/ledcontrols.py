@@ -1,5 +1,8 @@
+import rpyc
+
+# Local Imports
 from usbops import UsbOperations
-from valuecheck import ValueCheck
+from .valuecheck import ValueCheck
 
 
 class LedControls(UsbOperations):
@@ -11,6 +14,7 @@ class LedControls(UsbOperations):
         UsbOperations.__init__(self)
         self.led_id = {'left_secondary': '00', 'right_secondary': '01',
                        'left_primary': '02', 'right_primary': '03'}
+        self.conn = rpyc.connect("localhost", port=18812)
 
     def build_option_list(self, led_option):
         """
@@ -47,7 +51,7 @@ class LedControls(UsbOperations):
         else:
             data = [control_data.format(self.led_id[led_option], color)]
 
-        self.data_transfer(data)
+        self.conn.root.data_transfer(data)
 
     def set_off(self, led_option):
         self.set_color(led_option, '000000')
@@ -67,7 +71,7 @@ class LedControls(UsbOperations):
             data = [control_data.format(
                 self.led_id[led_option], speed, brightness)]
 
-        self.data_transfer(data)
+        self.conn.root.data_transfer(data)
 
     def set_breathe(self, led_option, color, speed=5, brightness=100):
         control_data = '11ff043e{}04{}{}f000{}'
@@ -84,4 +88,4 @@ class LedControls(UsbOperations):
             data = [control_data.format(
                 self.led_id[led_option], color, speed, brightness)]
 
-        self.data_transfer(data)
+        self.conn.root.data_transfer(data)

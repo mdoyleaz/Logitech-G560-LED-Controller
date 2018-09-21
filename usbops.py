@@ -1,6 +1,9 @@
 import usb.core
 import usb.util
 
+import rpyc
+from rpyc.utils.server import ThreadedServer
+
 from binascii import unhexlify
 from time import sleep
 
@@ -14,7 +17,7 @@ class G560NotFound(BaseException):
     pass
 
 
-class UsbOperations(object):
+class UsbOperations(rpyc.Service):
     """
     USB Object for driver management and data transfer
     """
@@ -46,23 +49,31 @@ class UsbOperations(object):
         return True
 
     def attach_driver(self):
-        usb.util.dispose_resources(self.dev)
         try:
-            self.dev.reset()
+            usb.util.release_interface(self.dev, 2)
+            self.dev.attach_kernel_driver(2)
         except Exception as e:
             print("Could not renable driver: ", e)
 
     def data_transfer(self, data_list):
+        self.detach_driver()
+
         if len(data_list) > 0:
             for data in data_list:
                 data = unhexlify(data)
 
                 self.dev.ctrl_transfer(
                     self.bm_req_type, self.b_req, self.wvalue, self.windex, data)
-                    
+
                 sleep(.006)
         else:
             data = unhexlify(data[0])
 
             self.dev.ctrl_transfer(
                 self.bm_req_type, self.b_req, self.wvalue, self.windex, data)
+
+        self.attach_driver()
+
+if __name__ == '__main__':
+    server = ThreadedServer(UsbOperations, port=18812, protocol_config={"allow_public_attrs": True})
+    server.start()
