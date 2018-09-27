@@ -1,17 +1,17 @@
 import rpyc
 
 # Local Imports
-from usbops import UsbOperations
+# from .usbops import UsbOperations
 from .valuecheck import ValueCheck
 
 
-class LedControls(UsbOperations):
+class LedControls(object):
     """
     Controls for G560 LEDs
     """
 
     def __init__(self):
-        UsbOperations.__init__(self)
+        # UsbOperations.__init__(self)
         self.led_id = {'left_secondary': '00', 'right_secondary': '01',
                        'left_primary': '02', 'right_primary': '03'}
         self.conn = rpyc.connect("localhost", port=18812)
@@ -87,5 +87,7 @@ class LedControls(UsbOperations):
         else:
             data = [control_data.format(
                 self.led_id[led_option], color, speed, brightness)]
+            print(data)
+
 
         self.conn.root.data_transfer(data)

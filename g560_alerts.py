@@ -16,15 +16,17 @@ class LedAlerts():
                 "body", "actions", "hints", "expire_timeout"]
         args = message.get_args_list()
 
-        if len(args) == 8:
+        if len(args) >= 8:
+            ## Builds list based on the key values in alers api
             notification = dict([(keys[i], args[i]) for i in range(8)])
-            print(notification["app_name"])
 
+            ## Alert testing read out
+            # print(notification['app_name'],"\n", notification['summary'])
             if notification['app_name'] == 'Slack':
                 profile.slack()
             elif notification['app_name'] == 'Spotify':
                 profile.spotify()
-            elif 'facebook' in notification['app_name']:
+            elif 'www.facebook.com' in notification['body']:
                 profile.facebook()
 
 ### Runs at runtime

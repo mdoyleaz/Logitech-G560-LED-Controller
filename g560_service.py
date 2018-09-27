@@ -8,7 +8,6 @@ from binascii import unhexlify
 from time import sleep
 
 
-
 class G560NotFound(BaseException):
     """
     Custom Exception for missing device
@@ -74,6 +73,8 @@ class UsbOperations(rpyc.Service):
 
         self.attach_driver()
 
+
 if __name__ == '__main__':
-    server = ThreadedServer(UsbOperations, port=18812, protocol_config={"allow_public_attrs": True})
+    server = ThreadedServer(UsbOperations, port=18812, protocol_config={
+                            "allow_public_attrs": True})
     server.start()
