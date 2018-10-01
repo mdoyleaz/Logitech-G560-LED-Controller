@@ -75,6 +75,6 @@ class UsbOperations(rpyc.Service):
 
 
 if __name__ == '__main__':
-    server = ThreadedServer(UsbOperations, port=18812, protocol_config={
+    server = ThreadedServer(UsbOperations, port=17657, protocol_config={
                             "allow_public_attrs": True})
     server.start()

@@ -1,0 +1,13 @@
+[Unit]
+Description=Logitech G560 LED Controller, RPC Service.
+After=multi-user.target
+
+[Service]
+ExecStart=/bin/g560service
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=G560_LED
+[Install]
+WantedBy=multi-user.target
+

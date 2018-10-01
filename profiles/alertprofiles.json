@@ -1,0 +1,35 @@
+{
+  "default": {
+    "function": "default_profile",
+    "ledoption": {
+      "primary": "784da5",
+      "secondary": "3a698e"
+    }
+  },
+  "alerts": {
+    "spotify": {
+      "function": "flash",
+      "ledoption": {
+        "primary": ["1ED761", "191919"]
+      },
+      "length": 2,
+      "speed": ".01"
+    },
+    "slack": {
+      "function": "flash",
+      "ledoption": {
+        "primary": ["CF0E5B", "E2A52E", "3AAE84", "6EC4CB"]
+      },
+      "length": 4,
+      "speed": ".01"
+    },
+    "facebook": {
+      "function": "flash",
+      "ledoption": {
+        "primary": ["3B5998"]
+      },
+      "length": 3,
+      "speed": ".6"
+    }
+  }
+}

@@ -1,7 +1,6 @@
 import rpyc
 
 # Local Imports
-# from .usbops import UsbOperations
 from .valuecheck import ValueCheck
 
 
@@ -14,7 +13,7 @@ class LedControls(object):
         # UsbOperations.__init__(self)
         self.led_id = {'left_secondary': '00', 'right_secondary': '01',
                        'left_primary': '02', 'right_primary': '03'}
-        self.conn = rpyc.connect("localhost", port=18812)
+        self.conn = rpyc.connect("localhost", port=17657)
 
     def build_option_list(self, led_option):
         """
@@ -57,7 +56,7 @@ class LedControls(object):
         self.set_color(led_option, '000000')
 
     def set_color_cycle(self, led_option, speed=8, brightness=75):
-        contrl_data = '11ff043e{}020000000000{}f8{}'
+        control_data = '11ff043e{}020000000000{}f8{}'
 
         speed = ValueCheck.cycle_speed(speed)
         brightness = ValueCheck.brightness(brightness)
