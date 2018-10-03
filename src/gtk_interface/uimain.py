@@ -31,14 +31,16 @@ class MainWindow(Gtk.ApplicationWindow):
         stack.set_hhomogeneous(True)
 
         stack.add_titled(self.uiboxes.home_box(), "Home", "Home")
-        stack.add_titled(self.uiboxes.fake_box(),
-                         "Color Profiles", "Color Profiles")
-        stack.add_titled(self.uiboxes.fake_box(),
-                         "Alert Profiles", "Alert Profiles")
-        stack.add_titled(self.uiboxes.fake_box(), "label", "A label")
+        # stack.add_titled(self.uiboxes.fake_box(),
+        #                  "Color Profiles", "Color Profiles")
+        # stack.add_titled(self.uiboxes.fake_box(),
+        #                  "Alert Profiles", "Alert Profiles")
+        # stack.add_titled(self.uiboxes.fake_box(), "label", "A label")
 
         stack_sidebar = Gtk.StackSidebar()
         stack_sidebar.set_stack(stack)
+        stack_sidebar.set_size_request((640/5), 300)
+
         vbox.pack_start(stack_sidebar, False, True, 0)
         vbox.pack_start(stack, True, True, 0)
 
