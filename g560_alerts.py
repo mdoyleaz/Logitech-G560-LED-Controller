@@ -15,6 +15,7 @@ class AlertControls(LedControls):
     Profiles are loaded on ever pass of 'Glib.MainLoop' to keep the json file dynamic
 
     """
+
     def __init__(self):
         LedControls.__init__(self)
 
@@ -39,7 +40,7 @@ class AlertControls(LedControls):
 
                 exec(f"self.{func}({app_profile})")
 
-                ### Non function needs to be fixed
+                # Non function needs to be fixed
             elif 'www.facebook.com' in notification['body']:
                 exec(f"self.{func}({'facebook'})")
             else:
@@ -47,14 +48,14 @@ class AlertControls(LedControls):
 
     def get_profiles(self):
         try:
-            with open('profiles/alertprofiles.json') as profiles:
+            with open('profiles/profilesettings.json') as profiles:
                 self.profile_data = json.load(profiles)
         except Exception as e:
             print(e)
 
     def default_profile(self):
         [self.set_color(option, color) for option,
-         color in self.profile_data['default']['ledoption'].items()]
+         color in self.profile_data['profiles']['current'].items()]
 
     def flash(self, profile):
         led_options = profile['ledoption']
@@ -80,6 +81,5 @@ if __name__ == '__main__':
     session_bus.add_match_string(
         "type='method_call',interface='org.freedesktop.Notifications',member='Notify',eavesdrop=true")
     session_bus.add_message_filter(AlertControls())
-
 
     GLib.MainLoop().run()

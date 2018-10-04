@@ -2,7 +2,7 @@ from gi.repository import Gtk
 
 # Interface helper classes
 from src.gtk_interface.uiwidgets import UiButtons
-from src.gtk_interface.uiwidgets import UiHelperWidgets
+from src.gtk_interface.uiwidgets import WidgetHelpers
 
 
 class ListBoxRowWithData(Gtk.ListBoxRow):
@@ -15,7 +15,7 @@ class ListBoxRowWithData(Gtk.ListBoxRow):
 class UiBoxes():
     def __init__(self):
         self.ui_buttons = UiButtons()
-        self.ui_widget = UiHelperWidgets()
+        self.ui_widget = WidgetHelpers()
 
     def home_box(self):
         # Main "Box" to build over window
@@ -23,7 +23,7 @@ class UiBoxes():
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         hbox.pack_end(vbox, True, True, 10)
 
-        color_list_box = self.color_list_box()
+        color_list_box = self.color_list_box('current')
 
         vbox.pack_start(color_list_box, False, False, 10)
 
@@ -40,16 +40,17 @@ class UiBoxes():
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
         return hbox
 
-    def color_list_box(self):
-        main_options = ['primary', 'secondary',]
-        led_options = ['right_primary', 'left_primary', 'right_secondary', 'left_secondary']
+    def color_list_box(self, profile):
+        main_options = ['primary', 'secondary', ]
+        led_options = ['right_primary', 'left_primary',
+                       'right_secondary', 'left_secondary']
         box_fill = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
         listbox = Gtk.ListBox()
         box_fill.pack_start(listbox, True, False, 0)
 
         for option in led_options:
-            button = self.ui_buttons.create_btn_color_select(option)
+            button = self.ui_buttons.create_btn_color_select(option, profile)
 
             if '_' in option:
                 option = option.replace('_', ' ')

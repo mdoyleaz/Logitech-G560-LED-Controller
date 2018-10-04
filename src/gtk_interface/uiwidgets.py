@@ -10,31 +10,24 @@ class UiButtons():
         self.led_control = LedControls()
         self.led_options = {}
 
-    def get_led_profile(self, option):
+    def create_btn_color_select(self, option, profile='default'):
+        led_color = WidgetHelpers.get_led_profile(profile)
 
-        try:
-            with open('profiles/ledprofiles.json') as profiles:
-                profile_data = json.load(profiles)
-
-                return profile_data['profiles']['default']['ledoption'][option]
-        except Exception as e:
-            print("Error loading JSON: ", e)
-
-
-    def create_btn_color_select(self, option):
-        led_color = self.get_led_profile(option)
-        self.led_options[option] = led_color
-
+        self.led_options[option] = led_color[option]
         hbox = Gtk.ButtonBox(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
 
         # Color Selection Button
         self.btn_color_sel = Gtk.ColorButton()
-        color = Gdk.RGBA()
+        # Converts HEX color to RGB
+        rgb = tuple(float(int(self.led_options[option][i:i + 6 // 3], 16) / 255)
+                    for i in range(0, 6, 6 // 3))
 
-        print(color)
+        color = Gdk.RGBA(rgb[0], rgb[1], rgb[2])
+
         self.btn_color_sel.set_rgba(color)
         self.btn_color_sel.connect(
             "color-set", self.on_color_selector_click, option)
+
         hbox.pack_start(self.btn_color_sel, False, False, 2)
 
         return hbox
@@ -55,11 +48,11 @@ class UiButtons():
         return hbox
 
     def on_color_selector_click(self, widget, option):
-        color = widget.get_color()
+        color = widget.get_rgba()
 
-        red = int(color.red / 256)
-        green = int(color.green / 256)
-        blue = int(color.blue / 256)
+        red = int(color.red * 255)
+        green = int(color.green * 255)
+        blue = int(color.blue * 255)
 
         self.led_options[option] = "{:02x}{:02x}{:02x}".format(
             red, green, blue)
@@ -68,11 +61,34 @@ class UiButtons():
         if len(self.led_options) > 0:
             for option, color in self.led_options.items():
                 self.led_control.set_color(option, color)
+            WidgetHelpers.put_led_profile('current', self.led_options)
 
-            self.led_options = {}
 
+class WidgetHelpers:
+    @staticmethod
+    def get_led_profile(profile):
+        try:
+            with open('profiles/profilesettings.json') as profiles:
+                loaded_profile = json.load(profiles)
+                loaded_profile = loaded_profile['profiles'][profile]
 
-class UiHelperWidgets:
+                return loaded_profile
+
+        except Exception as e:
+            print("Error loading JSON: ", e)
+
+    def put_led_profile(profile, data):
+        try:
+            with open('profiles/profilesettings.json', 'r+') as profiles:
+                loaded_profile = json.load(profiles)
+                loaded_profile['profiles'][profile] = data
+
+                profiles.seek(0)
+                json.dump(loaded_profile, profiles, indent=4)
+
+        except Exception as e:
+            print("Error loading JSON: ", e)
+
     @staticmethod
     def create_list_row(text, button):
         row = Gtk.ListBoxRow()
