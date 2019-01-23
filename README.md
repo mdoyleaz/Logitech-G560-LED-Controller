@@ -1,3 +1,5 @@
+### ATTN: I haven't been working on this, but I noticed it ended up being one of the top result on Google, if you are interested in using this and are having issues, or simply want additional features, let me know and I can start doing more work with it. I accomplished what I needed from this, so I started working on other projects.
+
 # Logitech-G560-LED-Controller
 
 Library for managing LEDs of the Logitech G560 speakers in Linux
@@ -10,6 +12,7 @@ Library for managing LEDs of the Logitech G560 speakers in Linux
 -   pyusb
 -   RPyC
 -   GTK 3
+-   libusb - Install with your distros package manager
 
 * * *
 
